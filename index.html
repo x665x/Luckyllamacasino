@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucky Llama Casino 🦙</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #0a0a1a;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* === HEADER === */
+  header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #e94560;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-size: 1.8rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, #f7d94e, #e94560);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor: pointer;
+  }
+
+  .balance-display {
+    background: linear-gradient(135deg, #e94560, #c23152);
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 0 20px rgba(233,69,96,0.3);
+    animation: pulse-glow 2s infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(233,69,96,0.3); }
+    50% { box-shadow: 0 0 30px rgba(233,69,96,0.6); }
+  }
+
+  /* === NAV === */
+  nav {
+    background: #16213e;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px;
+    flex-wrap: wrap;
+  }
+
+  nav button {
+    background: transparent;
+    color: #aaa;
+    border: none;
+    padding: 12px 28px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s;
+  }
+
+  nav button:hover, nav button.active {
+    background: linear-gradient(135deg, #e94560, #c23152);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  /* === MAIN === */
+  main {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 20px;
+  }
+
+  .game-section { display: none; }
+  .game-section.active { display: block; }
+
+  /* === HOME === */
+  .home-hero {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .home-hero h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #f7d94e, #e94560, #f7d94e);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  .home-hero p {
+    color: #aaa;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+  }
+
+  .home-hero .disclaimer {
+    background: rgba(233,69,96,0.1);
+    border: 1px solid #e94560;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 0.85rem;
+    color: #e94560;
+    max-width: 500px;
+    margin: 30px auto 0;
+  }
+
+  .game-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+  }
+
+  .game-card {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 1px solid #333;
+    border-radius: 15px;
+    padding: 30px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .game-card:hover {
+    border-color: #e94560;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(233,69,96,0.2);
+  }
+
+  .game-card .icon { font-size: 3rem; margin-bottom: 10px; }
+  .game-card h3 { font-size: 1.3rem; margin-bottom: 5px; }
+  .game-card p { color: #888; font-size: 0.85rem; }
+
+  /* === SHARED GAME STYLES === */
+  .game-container {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    border: 1px solid #333;
+  }
+
+  .game-container h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #f7d94e;
+  }
+
+  .bet-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+
+  .bet-controls label { font-weight: 600; color: #ccc; }
+
+  .bet-controls input {
+    width: 100px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #333;
+    background: #0a0a1a;
+    color: #fff;
+    font-size: 1.1rem;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .btn {
+    padding: 12px 35px;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #e94560, #c23152);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(233,69,96,0.4);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-secondary {
+    background: linear-gradient(135deg, #f7d94e, #f0c027);
+    color: #1a1a2e;
+  }
+
+  .result-message {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 20px 0;
+    min-height: 40px;
+  }
+
+  .win { color: #4ade80; }
+  .lose { color: #e94560; }
+  .push { color: #f7d94e; }
+
+  /* === SLOTS === */
+  .slot-machine {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 30px 0;
+  }
+
+  .slot-reel {
+    width: 100px;
+    height: 120px;
+    background: linear-gradient(180deg, #0a0a1a, #1a1a2e);
+    border: 3px solid #f7d94e;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 0 15px rgba(247,217,78,0.2);
+    transition: all 0.1s;
+  }
+
+  .slot-reel.spinning {
+    animation: reel-blur 0.1s infinite;
+    border-color: #e94560;
+  }
+
+  @keyframes reel-blur {
+    0% { filter: blur(0px); }
+    50% { filter: blur(2px); }
+    100% { filter: blur(0px); }
+  }
+
+  .paytable {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: #aaa;
+  }
+
+  .paytable div {
+    background: rgba(255,255,255,0.03);
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  /* === BLACKJACK === */
+  .cards-area {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+
+  .hand {
+    min-width: 200px;
+  }
+
+  .hand h3 {
+    font-size: 1rem;
+    color: #aaa;
+    margin-bottom: 10px;
+  }
+
+  .hand-cards {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-height: 90px;
+  }
+
+  .card {
+    width: 60px;
+    height: 85px;
+    background: #fff;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    animation: deal 0.3s ease-out;
+  }
+
+  .card.red { color: #e94560; }
+  .card.hidden-card { background: linear-gradient(135deg, #e94560, #c23152); color: transparent; font-size: 2rem; }
+  .card.hidden-card::after { content: "🂠"; color: #fff; font-size: 2rem; }
+
+  @keyframes deal {
+    from { transform: translateY(-30px) rotate(-10deg); opacity: 0; }
+    to { transform: translateY(0) rotate(0); opacity: 1; }
+  }
+
+  .hand-score {
+    margin-top: 8px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #f7d94e;
+  }
+
+  .bj-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+  }
+
+  /* === ROULETTE === */
+  .roulette-wheel-container {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin: 20px auto;
+  }
+
+  .roulette-wheel {
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 6px solid #f7d94e;
+    background: conic-gradient(
+      #2d6b35 0deg 9.73deg,
+      #c23152 9.73deg 19.46deg,
+      #1a1a2e 19.46deg 29.19deg,
+      #c23152 29.19deg 38.92deg,
+      #1a1a2e 38.92deg 48.65deg,
+      #c23152 48.65deg 58.38deg,
+      #1a1a2e 58.38deg 68.11deg,
+      #c23152 68.11deg 77.84deg,
+      #1a1a2e 77.84deg 87.57deg,
+      #c23152 87.57deg 97.3deg,
+      #1a1a2e 97.3deg 107.03deg,
+      #c23152 107.03deg 116.76deg,
+      #1a1a2e 116.76deg 126.49deg,
+      #c23152 126.49deg 136.22deg,
+      #1a1a2e 136.22deg 145.95deg,
+      #c23152 145.95deg 155.68deg,
+      #1a1a2e 155.68deg 165.41deg,
+      #c23152 165.41deg 175.14deg,
+      #1a1a2e 175.14deg 184.87deg,
+      #c23152 184.87deg 194.6deg,
+      #1a1a2e 194.6deg 204.33deg,
+      #c23152 204.33deg 214.06deg,
+      #1a1a2e 214.06deg 223.79deg,
+      #c23152 223.79deg 233.52deg,
+      #1a1a2e 233.52deg 243.25deg,
+      #c23152 243.25deg 252.98deg,
+      #1a1a2e 252.98deg 262.71deg,
+      #c23152 262.71deg 272.44deg,
+      #1a1a2e 272.44deg 282.17deg,
+      #c23152 282.17deg 291.9deg,
+      #1a1a2e 291.9deg 301.63deg,
+      #c23152 301.63deg 311.36deg,
+      #1a1a2e 311.36deg 321.09deg,
+      #c23152 321.09deg 330.82deg,
+      #1a1a2e 330.82deg 340.55deg,
+      #c23152 340.55deg 350.28deg,
+      #1a1a2e 350.28deg 360deg
+    );
+    transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+    box-shadow: 0 0 30px rgba(247,217,78,0.3), inset 0 0 40px rgba(0,0,0,0.5);
+  }
+
+  .wheel-pointer {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.8rem;
+    z-index: 10;
+    filter: drop-shadow(0 0 5px rgba(247,217,78,0.5));
+  }
+
+  .wheel-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #f7d94e, #f0c027);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #1a1a2e;
+    z-index: 5;
+  }
+
+  .roulette-bets {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    max-width: 400px;
+    margin: 20px auto;
+  }
+
+  .roulette-bets button {
+    padding: 12px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .roulette-bets button:hover { border-color: #f7d94e; }
+  .roulette-bets button.selected { border-color: #f7d94e; background: rgba(247,217,78,0.15); }
+  .roulette-bets button.bet-red { border-color: #e94560; }
+  .roulette-bets button.bet-red.selected { background: rgba(233,69,96,0.3); }
+  .roulette-bets button.bet-black { border-color: #888; }
+  .roulette-bets button.bet-black.selected { background: rgba(255,255,255,0.15); }
+  .roulette-bets button.bet-green { border-color: #2d6b35; }
+  .roulette-bets button.bet-green.selected { background: rgba(45,107,53,0.3); }
+
+  .roulette-result {
+    font-size: 2rem;
+    font-weight: 900;
+    margin: 10px 0;
+    min-height: 50px;
+  }
+
+  /* === FOOTER === */
+  footer {
+    text-align: center;
+    padding: 30px;
+    color: #555;
+    font-size: 0.8rem;
+    border-top: 1px solid #222;
+    margin-top: 50px;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 600px) {
+    .home-hero h1 { font-size: 2rem; }
+    .slot-reel { width: 80px; height: 100px; font-size: 2.8rem; }
+    .cards-area { gap: 20px; }
+    header { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo" onclick="showSection('home')">🦙 Lucky Llama</div>
+  <div class="balance-display">💰 $<span id="balance">1000</span></div>
+</header>
+
+<nav>
+  <button class="active" onclick="showSection('home')">🏠 Home</button>
+  <button onclick="showSection('slots')">🎰 Slots</button>
+  <button onclick="showSection('blackjack')">🃏 Blackjack</button>
+  <button onclick="showSection('roulette')">🎡 Roulette</button>
+</nav>
+
+<main>
+
+  <!-- HOME -->
+  <section id="home" class="game-section active">
+    <div class="home-hero">
+      <h1>Welcome to Lucky Llama Casino</h1>
+      <p>Where the odds are made up and the money isn't real ✨</p>
+      <div class="game-cards">
+        <div class="game-card" onclick="showSection('slots')">
+          <div class="icon">🎰</div>
+          <h3>Slots</h3>
+          <p>Spin to win. Or don't. It's fake money.</p>
+        </div>
+        <div class="game-card" onclick="showSection('blackjack')">
+          <div class="icon">🃏</div>
+          <h3>Blackjack</h3>
+          <p>Hit me. No really, hit me.</p>
+        </div>
+        <div class="game-card" onclick="showSection('roulette')">
+          <div class="icon">🎡</div>
+          <h3>Roulette</h3>
+          <p>Red, black, or existential dread.</p>
+        </div>
+      </div>
+      <div class="disclaimer">
+        ⚠️ FOR ENTERTAINMENT ONLY — No real money. No real gambling. Just real fun. Please gamble responsibly (in real life, not here — here go nuts).
+      </div>
+    </div>
+  </section>
+
+  <!-- SLOTS -->
+  <section id="slots" class="game-section">
+    <div class="game-container">
+      <h2>🎰 Slot Machine</h2>
+      <div class="slot-machine">
+        <div class="slot-reel" id="reel1">🍒</div>
+        <div class="slot-reel" id="reel2">🍋</div>
+        <div class="slot-reel" id="reel3">⭐</div>
+      </div>
+      <div class="result-message" id="slot-result"></div>
+      <div class="bet-controls">
+        <label>Bet: $</label>
+        <input type="number" id="slot-bet" value="50" min="10" max="500" step="10">
+      </div>
+      <button class="btn btn-primary" id="spin-btn" onclick="spinSlots()">🎰 SPIN!</button>
+      <div class="paytable">
+        <div>🍒🍒🍒 — 5x</div>
+        <div>🍋🍋🍋 — 8x</div>
+        <div>🍇🍇🍇 — 10x</div>
+        <div>💎💎💎 — 15x</div>
+        <div>⭐⭐⭐ — 20x</div>
+        <div>7️⃣7️⃣7️⃣ — 50x</div>
+        <div>Any pair — 2x</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLACKJACK -->
+  <section id="blackjack" class="game-section">
+    <div class="game-container">
+      <h2>🃏 Blackjack</h2>
+      <div class="cards-area">
+        <div class="hand">
+          <h3>Dealer</h3>
+          <div class="hand-cards" id="dealer-cards"></div>
+          <div class="hand-score" id="dealer-score"></div>
+        </div>
+        <div class="hand">
+          <h3>You</h3>
+          <div class="hand-cards" id="player-cards"></div>
+          <div class="hand-score" id="player-score"></div>
+        </div>
+      </div>
+      <div class="result-message" id="bj-result"></div>
+      <div class="bet-controls" id="bj-bet-area">
+        <label>Bet: $</label>
+        <input type="number" id="bj-bet" value="50" min="10" max="500" step="10">
+        <button class="btn btn-primary" onclick="startBlackjack()">DEAL</button>
+      </div>
+      <div class="bj-actions" id="bj-actions" style="display:none;">
+        <button class="btn btn-primary" onclick="bjHit()">👊 Hit</button>
+        <button class="btn btn-secondary" onclick="bjStand()">🛑 Stand</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROULETTE -->
+  <section id="roulette" class="game-section">
+    <div class="game-container">
+      <h2>🎡 Roulette</h2>
+      <div class="roulette-wheel-container">
+        <div class="wheel-pointer">▼</div>
+        <div class="roulette-wheel" id="roulette-wheel"></div>
+        <div class="wheel-center" id="wheel-number">?</div>
+      </div>
+      <div class="roulette-result" id="roulette-result"></div>
+      <p style="color:#aaa; margin-bottom:10px;">Pick your bet:</p>
+      <div class="roulette-bets" id="roulette-bets">
+        <button class="bet-red" onclick="selectRBet('red', this)">🔴 Red (2x)</button>
+        <button class="bet-black" onclick="selectRBet('black', this)">⚫ Black (2x)</button>
+        <button class="bet-green" onclick="selectRBet('green', this)">🟢 Green (14x)</button>
+        <button onclick="selectRBet('odd', this)">Odd (2x)</button>
+        <button onclick="selectRBet('even', this)">Even (2x)</button>
+        <button onclick="selectRBet('low', this)">1-18 (2x)</button>
+      </div>
+      <div class="bet-controls">
+        <label>Bet: $</label>
+        <input type="number" id="roulette-bet" value="50" min="10" max="500" step="10">
+      </div>
+      <button class="btn btn-primary" id="roulette-spin-btn" onclick="spinRoulette()">🎡 SPIN</button>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  🦙 Lucky Llama Casino — 100% Fake Money | Built for fun, not funds | Please gamble responsibly IRL<br>
+  <span style="color:#333;">No llamas were harmed in the making of this casino.</span>
+</footer>
+
+<script>
+  // === STATE ===
+  let balance = 1000;
+  let selectedRBet = null;
+
+  // === UTILS ===
+  function updateBalance(amount) {
+    balance += amount;
+    if (balance < 0) balance = 0;
+    document.getElementById('balance').textContent = balance;
+    if (balance === 0) {
+      setTimeout(() => {
+        if (confirm("You're broke! 😂 Want a bailout of $500? (The Fed would be proud)")) {
+          balance = 500;
+          document.getElementById('balance').textContent = balance;
+        }
+      }, 500);
+    }
+  }
+
+  function showSection(id) {
+    document.querySelectorAll('.game-section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    const labels = { home: '🏠 Home', slots: '🎰 Slots', blackjack: '🃏 Blackjack', roulette: '🎡 Roulette' };
+    document.querySelectorAll('nav button').forEach(b => {
+      if (b.textContent.trim() === labels[id]) b.classList.add('active');
+    });
+  }
+
+  // === SLOTS ===
+  const slotSymbols = ['🍒', '🍋', '🍇', '💎', '⭐', '7️⃣'];
+  const slotMultipliers = { '🍒': 5, '🍋': 8, '🍇': 10, '💎': 15, '⭐': 20, '7️⃣': 50 };
+  let spinning = false;
+
+  function spinSlots() {
+    if (spinning) return;
+    const bet = parseInt(document.getElementById('slot-bet').value);
+    if (bet > balance) { document.getElementById('slot-result').textContent = "Not enough money! 😅"; return; }
+    if (bet < 10) { document.getElementById('slot-result').textContent = "Minimum bet is $10!"; return; }
+
+    spinning = true;
+    updateBalance(-bet);
+    document.getElementById('slot-result').textContent = '';
+    document.getElementById('slot-result').className = 'result-message';
+    const reels = [document.getElementById('reel1'), document.getElementById('reel2'), document.getElementById('reel3')];
+    reels.forEach(r => r.classList.add('spinning'));
+
+    const results = [0, 1, 2].map(() => slotSymbols[Math.floor(Math.random() * slotSymbols.length)]);
+
+    // Animate each reel stopping
+    results.forEach((symbol, i) => {
+      setTimeout(() => {
+        let flickerCount = 0;
+        const flickerInterval = setInterval(() => {
+          reels[i].textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+          flickerCount++;
+          if (flickerCount > 8) {
+            clearInterval(flickerInterval);
+            reels[i].textContent = symbol;
+            reels[i].classList.remove('spinning');
+          }
+        }, 80);
+      }, i * 600);
+    });
+
+    setTimeout(() => {
+      const [a, b, c] = results;
+      const resultEl = document.getElementById('slot-result');
+      if (a === b && b === c) {
+        const winnings = bet * slotMulti
